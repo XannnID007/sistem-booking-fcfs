@@ -79,85 +79,32 @@
                 </div>
             </div>
 
-            <!-- Booking Form -->
+            <!-- Booking Card -->
             <div class="lg:col-span-1">
                 <div class="bg-white rounded-xl shadow-lg p-6 sticky top-20">
                     <h3 class="text-xl font-bold text-gray-800 mb-6">Booking Studio</h3>
 
                     @if ($studio->status == 'aktif')
-                        <form action="{{ route('customer.booking.store') }}" method="POST" id="bookingForm">
-                            @csrf
-                            <input type="hidden" name="studio_id" value="{{ $studio->id }}">
-
-                            <!-- Tanggal -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Tanggal Booking</label>
-                                <input type="date" name="tanggal_booking" id="tanggal_booking" min="{{ date('Y-m-d') }}"
-                                    required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition">
+                        <div class="space-y-4">
+                            <div class="bg-teal-50 rounded-lg p-4 border border-teal-200">
+                                <p class="text-sm text-teal-700 mb-2">💡 <strong>Info Booking</strong></p>
+                                <ul class="text-xs text-teal-600 space-y-1">
+                                    <li>✓ Sistem FCFS (First Come First Served)</li>
+                                    <li>✓ Cek ketersediaan jadwal real-time</li>
+                                    <li>✓ Pembayaran fleksibel (DP/Lunas)</li>
+                                </ul>
                             </div>
 
-                            <!-- Jam Mulai -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Jam Mulai</label>
-                                <input type="time" name="jam_mulai" id="jam_mulai" required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition">
+                            <a href="{{ route('customer.booking.create', $studio->id) }}"
+                                class="block w-full text-center bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 rounded-lg font-bold hover:from-teal-700 hover:to-cyan-700 transition shadow-lg">
+                                🎵 Booking Sekarang
+                            </a>
+
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500">Dengan booking, Anda menyetujui</p>
+                                <a href="#" class="text-xs text-teal-600 hover:underline">Syarat & Ketentuan</a>
                             </div>
-
-                            <!-- Durasi -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Durasi (Jam)</label>
-                                <select name="durasi_jam" id="durasi_jam" required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition">
-                                    <option value="">Pilih Durasi</option>
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }} Jam</option>
-                                    @endfor
-                                </select>
-                            </div>
-
-                            <!-- Catatan -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Catatan (Opsional)</label>
-                                <textarea name="catatan" rows="3"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
-                                    placeholder="Tambahkan catatan jika diperlukan..."></textarea>
-                            </div>
-
-                            <!-- Total Harga -->
-                            <div class="bg-teal-50 rounded-lg p-4 mb-4" id="totalHargaBox" style="display:none;">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-gray-700">Harga per jam:</span>
-                                    <span class="font-medium">Rp
-                                        {{ number_format($studio->harga_per_jam, 0, ',', '.') }}</span>
-                                </div>
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-gray-700">Durasi:</span>
-                                    <span class="font-medium"><span id="displayDurasi">0</span> jam</span>
-                                </div>
-                                <div class="border-t pt-2 mt-2">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-gray-800 font-semibold">Total:</span>
-                                        <span class="text-xl font-bold text-teal-600" id="displayTotal">Rp 0</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Check Availability -->
-                            <button type="button" id="checkBtn"
-                                class="w-full bg-cyan-600 text-white py-3 rounded-lg font-medium hover:bg-cyan-700 transition mb-3">
-                                Cek Ketersediaan
-                            </button>
-
-                            <!-- Submit Button -->
-                            <button type="submit" id="submitBtn" style="display:none;"
-                                class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition shadow-lg">
-                                Booking Sekarang
-                            </button>
-
-                            <!-- Message Box -->
-                            <div id="messageBox" class="mt-4" style="display:none;"></div>
-                        </form>
+                        </div>
                     @else
                         <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
                             <svg class="w-12 h-12 text-red-400 mx-auto mb-2" fill="none" stroke="currentColor"
@@ -175,86 +122,4 @@
         </div>
 
     </div>
-
-    @push('scripts')
-        <script>
-            const hargaPerJam = {{ $studio->harga_per_jam }};
-            const studioId = {{ $studio->id }};
-            const checkUrl = "{{ route('customer.booking.check') }}";
-            const csrfToken = "{{ csrf_token() }}";
-
-            // Calculate total
-            document.getElementById('durasi_jam').addEventListener('change', function() {
-                const durasi = this.value;
-                if (durasi) {
-                    const total = hargaPerJam * durasi;
-                    document.getElementById('displayDurasi').textContent = durasi;
-                    document.getElementById('displayTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
-                    document.getElementById('totalHargaBox').style.display = 'block';
-                } else {
-                    document.getElementById('totalHargaBox').style.display = 'none';
-                }
-            });
-
-            // Check availability
-            document.getElementById('checkBtn').addEventListener('click', async function() {
-                const tanggal = document.getElementById('tanggal_booking').value;
-                const jamMulai = document.getElementById('jam_mulai').value;
-                const durasi = document.getElementById('durasi_jam').value;
-                const messageBox = document.getElementById('messageBox');
-                const submitBtn = document.getElementById('submitBtn');
-
-                if (!tanggal || !jamMulai || !durasi) {
-                    messageBox.innerHTML =
-                        '<div class="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg text-sm">Mohon lengkapi semua field!</div>';
-                    messageBox.style.display = 'block';
-                    submitBtn.style.display = 'none';
-                    return;
-                }
-
-                this.disabled = true;
-                this.textContent = 'Mengecek...';
-
-                try {
-                    const response = await fetch(checkUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            studio_id: studioId,
-                            tanggal_booking: tanggal,
-                            jam_mulai: jamMulai,
-                            durasi_jam: durasi
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.available) {
-                        messageBox.innerHTML =
-                            '<div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm"><strong>✓ Jadwal Tersedia!</strong><br>' +
-                            data.message + '</div>';
-                        messageBox.style.display = 'block';
-                        submitBtn.style.display = 'block';
-                    } else {
-                        messageBox.innerHTML =
-                            '<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"><strong>✗ Tidak Tersedia</strong><br>' +
-                            data.message + '</div>';
-                        messageBox.style.display = 'block';
-                        submitBtn.style.display = 'none';
-                    }
-                } catch (error) {
-                    messageBox.innerHTML =
-                        '<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">Terjadi kesalahan. Silakan coba lagi.</div>';
-                    messageBox.style.display = 'block';
-                    submitBtn.style.display = 'none';
-                }
-
-                this.disabled = false;
-                this.textContent = 'Cek Ketersediaan';
-            });
-        </script>
-    @endpush
 @endsection

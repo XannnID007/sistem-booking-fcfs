@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\LaporanController;
 
-// Welcome Page (HARUS DI PALING ATAS)
+// Welcome Page
 Route::get('/', function () {
     if (auth()->check()) {
         return auth()->user()->isAdmin()
@@ -47,11 +47,11 @@ Route::middleware(['auth', 'role:customer'])->name('customer.')->group(function 
     Route::post('/booking/store', [CustomerBookingController::class, 'store'])->name('booking.store');
     Route::get('/booking', [CustomerBookingController::class, 'index'])->name('booking.index');
     Route::get('/booking/{booking}', [CustomerBookingController::class, 'show'])->name('booking.show');
-    Route::post('/booking/{booking}/upload-payment', [CustomerBookingController::class, 'uploadPayment'])->name('booking.upload');
     Route::post('/booking/{booking}/cancel', [CustomerBookingController::class, 'cancel'])->name('booking.cancel');
 
     // Riwayat Booking
     Route::get('/riwayat', [CustomerBookingController::class, 'history'])->name('booking.history');
+    Route::get('/riwayat/{booking}', [CustomerBookingController::class, 'historyDetail'])->name('booking.history.detail');
 });
 
 // Admin Routes

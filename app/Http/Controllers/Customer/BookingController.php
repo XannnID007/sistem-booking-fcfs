@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Studio;
 use App\Models\Booking;
 use App\Models\Payment;
-use App\Models\QrisSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -69,7 +68,7 @@ class BookingController extends Controller
         return response()->json([
             'available' => true,
             'total_harga' => $totalHarga,
-            'message' => 'Jadwal tersedia! Silakan lanjutkan booking.'
+            'message' => 'Jadwal tersedia! Silakan lanjutkan ke pembayaran.'
         ]);
     }
 
@@ -80,7 +79,10 @@ class BookingController extends Controller
             'tanggal_booking' => 'required|date|after_or_equal:today',
             'jam_mulai' => 'required',
             'durasi_jam' => 'required|integer|min:1|max:12',
-            'catatan' => 'nullable|string|max:500'
+            'catatan' => 'nullable|string|max:500',
+            'jumlah_bayar' => 'required|numeric|min:1',
+            'tipe_pembayaran' => 'required|in:dp,lunas',
+            'bukti_transfer' => 'required|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         $jamMulai = Carbon::parse($validated['jam_mulai']);
@@ -125,10 +127,25 @@ class BookingController extends Controller
                 'catatan' => $validated['catatan']
             ]);
 
+            // Upload bukti transfer
+            $file = $request->file('bukti_transfer');
+            $filename = 'payment_' . time() . '_' . $booking->id . '.' . $file->extension();
+            $file->move(public_path('uploads/payments'), $filename);
+
+            // Buat record pembayaran
+            Payment::create([
+                'booking_id' => $booking->id,
+                'jumlah_bayar' => $validated['jumlah_bayar'],
+                'tipe_pembayaran' => $validated['tipe_pembayaran'],
+                'metode_pembayaran' => 'qris',
+                'status_pembayaran' => 'pending',
+                'bukti_transfer' => $filename
+            ]);
+
             DB::commit();
 
             return redirect()->route('customer.booking.show', $booking->id)
-                ->with('success', 'Booking berhasil! Silakan lakukan pembayaran.');
+                ->with('success', 'Booking berhasil! Menunggu verifikasi pembayaran dari admin.');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
@@ -143,7 +160,6 @@ class BookingController extends Controller
         }
 
         $booking->load(['studio', 'payments']);
-        $qrisSetting = QrisSetting::aktif()->first();
 
         // Hitung total bayar dan sisa
         $totalBayar = $booking->payments()
@@ -152,46 +168,7 @@ class BookingController extends Controller
 
         $sisaBayar = $booking->total_harga - $totalBayar;
 
-        return view('customer.booking.show', compact('booking', 'qrisSetting', 'totalBayar', 'sisaBayar'));
-    }
-
-    public function uploadPayment(Request $request, Booking $booking)
-    {
-        if ($booking->user_id !== auth()->id()) {
-            abort(403);
-        }
-
-        $request->validate([
-            'bukti_transfer' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'jumlah_bayar' => 'required|numeric|min:0',
-            'tipe_pembayaran' => 'required|in:dp,lunas'
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            // Upload bukti transfer
-            $file = $request->file('bukti_transfer');
-            $filename = 'payment_' . time() . '_' . $booking->id . '.' . $file->extension();
-            $file->move(public_path('uploads/payments'), $filename);
-
-            // Buat record pembayaran
-            Payment::create([
-                'booking_id' => $booking->id,
-                'jumlah_bayar' => $request->jumlah_bayar,
-                'tipe_pembayaran' => $request->tipe_pembayaran,
-                'metode_pembayaran' => 'qris',
-                'status_pembayaran' => 'pending',
-                'bukti_transfer' => $filename
-            ]);
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload. Menunggu verifikasi admin.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Gagal upload bukti pembayaran.');
-        }
+        return view('customer.booking.show', compact('booking', 'totalBayar', 'sisaBayar'));
     }
 
     public function cancel(Booking $booking)
@@ -217,5 +194,22 @@ class BookingController extends Controller
             ->paginate(10);
 
         return view('customer.booking.history', compact('bookings'));
+    }
+
+    public function historyDetail(Booking $booking)
+    {
+        // Pastikan user hanya bisa lihat booking miliknya sendiri
+        if ($booking->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $booking->load(['studio', 'payments.verifikator']);
+
+        // Hitung total bayar
+        $totalBayar = $booking->payments()
+            ->where('status_pembayaran', 'terverifikasi')
+            ->sum('jumlah_bayar');
+
+        return view('customer.booking.history-detail', compact('booking', 'totalBayar'));
     }
 }

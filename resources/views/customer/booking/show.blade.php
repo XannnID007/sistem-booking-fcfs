@@ -11,7 +11,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
-            Kembali
+            Kembali ke Booking Saya
         </a>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -22,19 +22,19 @@
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Detail Booking</h2>
                         @if ($booking->status_booking == 'pending')
-                            <span class="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg font-semibold">Pending</span>
+                            <span class="px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg font-semibold text-sm">Pending</span>
                         @elseif($booking->status_booking == 'dibayar')
-                            <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold">Dibayar</span>
+                            <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-semibold text-sm">Dibayar</span>
                         @elseif($booking->status_booking == 'selesai')
-                            <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold">Selesai</span>
+                            <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-semibold text-sm">Selesai</span>
                         @else
-                            <span class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold">Dibatalkan</span>
+                            <span class="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-semibold text-sm">Dibatalkan</span>
                         @endif
                     </div>
 
                     <div class="space-y-4">
                         <div class="flex items-start">
-                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4">
+                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="flex items-start">
-                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4">
+                            <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                                 <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
@@ -67,7 +67,7 @@
 
                         @if ($booking->catatan)
                             <div class="flex items-start">
-                                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4">
+                                <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                                     <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -132,21 +132,13 @@
                             @endforeach
                         </div>
 
-                        @php
-                            $totalBayar = $booking
-                                ->payments()
-                                ->where('status_pembayaran', 'terverifikasi')
-                                ->sum('jumlah_bayar');
-                            $sisaBayar = $booking->total_harga - $totalBayar;
-                        @endphp
-
                         @if ($sisaBayar > 0)
-                            <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
-                                <p class="text-orange-700 text-sm font-medium">Sisa Pembayaran: Rp
+                            <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mt-4">
+                                <p class="text-orange-700 text-sm font-medium">⚠️ Sisa Pembayaran: Rp
                                     {{ number_format($sisaBayar, 0, ',', '.') }}</p>
                             </div>
                         @else
-                            <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-3 mt-4">
                                 <p class="text-green-700 text-sm font-medium">✓ Pembayaran Lunas</p>
                             </div>
                         @endif
@@ -156,88 +148,66 @@
                 </div>
             </div>
 
-            <!-- Payment Form -->
+            <!-- Action Card -->
             <div class="lg:col-span-1">
-                @php
-                    $pendingPayment = $booking->payments()->where('status_pembayaran', 'pending')->exists();
-                @endphp
+                <div class="bg-white rounded-xl shadow-md p-6 sticky top-20">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Status</h3>
 
-                @if ($booking->status_booking != 'dibatalkan' && $sisaBayar > 0 && !$pendingPayment)
-                    <div class="bg-white rounded-xl shadow-md p-6 sticky top-20">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4">Upload Bukti Pembayaran</h3>
+                    @php
+                        $pendingPayment = $booking->payments()->where('status_pembayaran', 'pending')->exists();
+                    @endphp
 
-                        <!-- QR Code -->
-                        @if ($qrisSetting)
-                            <div class="bg-gray-50 rounded-lg p-4 mb-4 text-center">
-                                <p class="text-sm text-gray-600 mb-3">Scan QR Code untuk pembayaran:</p>
-                                <div class="bg-white p-4 rounded-lg inline-block">
-                                    <img src="{{ asset('uploads/qris/' . $qrisSetting->qr_code_image) }}" alt="QR Code"
-                                        class="w-48 h-48 mx-auto">
-                                </div>
-                                <p class="text-xs text-gray-500 mt-2">{{ $qrisSetting->nama_merchant }}</p>
-                            </div>
+                    @if ($pendingPayment)
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                            <svg class="w-10 h-10 text-yellow-500 mx-auto mb-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h4 class="text-center font-semibold text-yellow-800 mb-1">Menunggu Verifikasi</h4>
+                            <p class="text-center text-yellow-700 text-sm">Pembayaran Anda sedang diverifikasi oleh admin</p>
+                        </div>
+                    @elseif($sisaBayar <= 0)
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                            <svg class="w-10 h-10 text-green-500 mx-auto mb-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h4 class="text-center font-semibold text-green-800 mb-1">Pembayaran Lunas</h4>
+                            <p class="text-center text-green-700 text-sm">Terima kasih! Pembayaran Anda sudah lunas</p>
+                        </div>
+                    @else
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                            <svg class="w-10 h-10 text-red-500 mx-auto mb-2" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <h4 class="text-center font-semibold text-red-800 mb-1">Belum Lunas</h4>
+                            <p class="text-center text-red-700 text-sm">Sisa: Rp
+                                {{ number_format($sisaBayar, 0, ',', '.') }}</p>
+                        </div>
+                    @endif
+
+                    <div class="space-y-3">
+                        @if ($booking->status_booking == 'pending' && !$pendingPayment)
+                            <form action="{{ route('customer.booking.cancel', $booking->id) }}" method="POST"
+                                onsubmit="return confirm('Yakin ingin membatalkan booking ini?')">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full px-4 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-medium text-sm">
+                                    Batalkan Booking
+                                </button>
+                            </form>
                         @endif
 
-                        <form action="{{ route('customer.booking.upload', $booking->id) }}" method="POST"
-                            enctype="multipart/form-data">
-                            @csrf
-
-                            <!-- Jumlah Bayar -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Jumlah Bayar</label>
-                                <input type="number" name="jumlah_bayar" required min="1"
-                                    max="{{ $booking->total_harga - $totalBayar }}"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                                    placeholder="Contoh: {{ number_format($booking->total_harga, 0, ',', '.') }}">
-                                <p class="text-xs text-gray-500 mt-1">Min: Rp 1 | Max: Rp
-                                    {{ number_format($booking->total_harga - $totalBayar, 0, ',', '.') }}</p>
-                            </div>
-
-                            <!-- Tipe Pembayaran -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Tipe Pembayaran</label>
-                                <select name="tipe_pembayaran" required
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
-                                    <option value="lunas">Lunas</option>
-                                    <option value="dp">DP (Down Payment)</option>
-                                </select>
-                            </div>
-
-                            <!-- Bukti Transfer -->
-                            <div class="mb-4">
-                                <label class="block text-gray-700 text-sm font-medium mb-2">Bukti Transfer</label>
-                                <input type="file" name="bukti_transfer" required accept="image/*"
-                                    class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent">
-                                <p class="text-xs text-gray-500 mt-1">Format: JPG, PNG (Max: 2MB)</p>
-                            </div>
-
-                            <button type="submit"
-                                class="w-full bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-3 rounded-lg font-medium hover:from-teal-700 hover:to-cyan-700 transition shadow-lg">
-                                Upload Bukti
-                            </button>
-                        </form>
+                        <a href="{{ route('customer.booking.index') }}"
+                            class="block w-full text-center px-4 py-3 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition font-medium text-sm">
+                            Kembali
+                        </a>
                     </div>
-                @elseif($pendingPayment)
-                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-                        <svg class="w-12 h-12 text-yellow-500 mx-auto mb-3" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <h4 class="text-center font-semibold text-yellow-800 mb-2">Menunggu Verifikasi</h4>
-                        <p class="text-center text-yellow-700 text-sm">Pembayaran Anda sedang diverifikasi oleh admin</p>
-                    </div>
-                @elseif($sisaBayar <= 0)
-                    <div class="bg-green-50 border border-green-200 rounded-lg p-6">
-                        <svg class="w-12 h-12 text-green-500 mx-auto mb-3" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <h4 class="text-center font-semibold text-green-800 mb-2">Pembayaran Lunas</h4>
-                        <p class="text-center text-green-700 text-sm">Terima kasih! Pembayaran Anda sudah lunas</p>
-                    </div>
-                @endif
+                </div>
             </div>
         </div>
 

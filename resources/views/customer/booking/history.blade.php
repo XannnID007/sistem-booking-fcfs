@@ -53,7 +53,7 @@
                                                 ->sum('jumlah_bayar');
                                         @endphp
                                         @if ($totalBayar > 0)
-                                            <p class="text-xs text-yellow-600">Terbayar: Rp
+                                            <p class="text-xs text-green-600">Terbayar: Rp
                                                 {{ number_format($totalBayar, 0, ',', '.') }}</p>
                                         @endif
                                     </td>
@@ -79,8 +79,8 @@
                                         @endif
                                     </td>
                                     <td class="px-4 py-3">
-                                        <a href="{{ route('customer.booking.show', $booking->id) }}"
-                                            class="text-yellow-600 hover:text-yellow-700 font-medium text-sm">
+                                        <a href="{{ route('customer.booking.history.detail', $booking->id) }}"
+                                            class="text-teal-600 hover:text-teal-700 font-medium text-sm">
                                             Detail →
                                         </a>
                                     </td>
@@ -106,7 +106,7 @@
                 <h3 class="text-base font-semibold text-gray-800 mb-1">Belum Ada Riwayat</h3>
                 <p class="text-sm text-gray-500 mb-4">Anda belum memiliki riwayat booking</p>
                 <a href="{{ route('customer.studio.index') }}"
-                    class="inline-block px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition font-medium text-sm">
+                    class="inline-block px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition font-medium text-sm">
                     Mulai Booking
                 </a>
             </div>
