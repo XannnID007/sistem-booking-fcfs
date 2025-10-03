@@ -3,123 +3,144 @@
 @section('title', 'Detail Studio')
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="min-h-screen bg-slate-50 py-6">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <!-- Back Button -->
-        <a href="{{ route('customer.studio.index') }}"
-            class="inline-flex items-center text-teal-600 hover:text-teal-700 mb-6 font-medium">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            Kembali ke Daftar Studio
-        </a>
+            <a href="{{ route('customer.studio.index') }}"
+                class="inline-flex items-center text-sm text-amber-600 hover:text-amber-700 mb-6 font-medium">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Kembali
+            </a>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Studio Info -->
-            <div class="lg:col-span-2">
-                <!-- Image -->
-                <div class="bg-white rounded-xl overflow-hidden shadow-lg mb-6">
-                    <div class="h-96 bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
-                        @if ($studio->gambar)
-                            <img src="{{ asset('uploads/studios/' . $studio->gambar) }}" alt="{{ $studio->nama_studio }}"
-                                class="w-full h-full object-cover">
-                        @else
-                            <svg class="w-32 h-32 text-white opacity-50" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
-                                </path>
-                            </svg>
-                        @endif
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl overflow-hidden shadow-sm mb-6">
+                        <div class="h-64 bg-slate-100">
+                            @if ($studio->gambar)
+                                <img src="{{ asset('uploads/studios/' . $studio->gambar) }}"
+                                    alt="{{ $studio->nama_studio }}" class="w-full h-full object-cover">
+                            @else
+                                <div
+                                    class="w-full h-full flex items-center justify-center bg-gradient-to-br from-amber-50 to-orange-50">
+                                    <svg class="w-20 h-20 text-amber-300" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
+                                        </path>
+                                    </svg>
+                                </div>
+                            @endif
+                        </div>
                     </div>
-                </div>
 
-                <!-- Details -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ $studio->nama_studio }}</h1>
-                            <div class="flex items-center text-gray-600">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                    </path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                {{ $studio->lokasi }}
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h1 class="text-2xl font-bold text-slate-900 mb-2">{{ $studio->nama_studio }}</h1>
+                                <div class="flex items-center text-sm text-slate-600">
+                                    <svg class="w-4 h-4 mr-1 text-amber-600" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                        </path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    {{ $studio->lokasi }}
+                                </div>
+                            </div>
+                            @if ($studio->status == 'aktif')
+                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-semibold">
+                                    Tersedia
+                                </span>
+                            @else
+                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-lg text-xs font-semibold">
+                                    Tutup
+                                </span>
+                            @endif
+                        </div>
+
+                        <div class="border-t pt-4 mb-4">
+                            <h3 class="text-sm font-bold text-slate-900 mb-2">Deskripsi</h3>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                {{ $studio->deskripsi ?? 'Studio musik profesional dengan fasilitas lengkap.' }}
+                            </p>
+                        </div>
+
+                        <div class="bg-amber-50 rounded-lg p-4 border border-amber-200">
+                            <p class="text-xs text-slate-600 mb-1">Harga Sewa</p>
+                            <div class="flex items-baseline">
+                                <span class="text-2xl font-bold text-amber-600">
+                                    Rp {{ number_format($studio->harga_per_jam, 0, ',', '.') }}
+                                </span>
+                                <span class="text-sm text-slate-600 ml-2">/ jam</span>
                             </div>
                         </div>
-                        @if ($studio->status == 'aktif')
-                            <span class="px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-semibold">
-                                Tersedia
-                            </span>
-                        @else
-                            <span class="px-4 py-2 bg-red-100 text-red-700 rounded-lg text-sm font-semibold">
-                                Tidak Tersedia
-                            </span>
-                        @endif
-                    </div>
-
-                    <div class="border-t pt-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Deskripsi</h3>
-                        <p class="text-gray-600 leading-relaxed">
-                            {{ $studio->deskripsi ?? 'Tidak ada deskripsi' }}
-                        </p>
-                    </div>
-
-                    <div class="border-t mt-6 pt-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Harga</h3>
-                        <div class="flex items-end">
-                            <span class="text-4xl font-bold text-teal-600">Rp
-                                {{ number_format($studio->harga_per_jam, 0, ',', '.') }}</span>
-                            <span class="text-gray-500 ml-2 mb-1">per jam</span>
-                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Booking Card -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-xl shadow-lg p-6 sticky top-20">
-                    <h3 class="text-xl font-bold text-gray-800 mb-6">Booking Studio</h3>
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-xl shadow-sm p-5 sticky top-20">
+                        <h3 class="text-base font-bold text-slate-900 mb-4">Booking Studio</h3>
 
-                    @if ($studio->status == 'aktif')
-                        <div class="space-y-4">
-                            <div class="bg-teal-50 rounded-lg p-4 border border-teal-200">
-                                <p class="text-sm text-teal-700 mb-2">💡 <strong>Info Booking</strong></p>
-                                <ul class="text-xs text-teal-600 space-y-1">
-                                    <li>✓ Sistem FCFS (First Come First Served)</li>
-                                    <li>✓ Cek ketersediaan jadwal real-time</li>
-                                    <li>✓ Pembayaran fleksibel (DP/Lunas)</li>
+                        @if ($studio->status == 'aktif')
+                            <div class="bg-blue-50 rounded-lg p-4 mb-4 border border-blue-200">
+                                <p class="text-xs font-bold text-blue-900 mb-2">Info Booking</p>
+                                <ul class="text-xs text-blue-700 space-y-1">
+                                    <li class="flex items-start">
+                                        <svg class="w-3.5 h-3.5 mr-1.5 mt-0.5 flex-shrink-0" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span>First Come First Served</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-3.5 h-3.5 mr-1.5 mt-0.5 flex-shrink-0" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span>Cek ketersediaan real-time</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <svg class="w-3.5 h-3.5 mr-1.5 mt-0.5 flex-shrink-0" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span>Pembayaran DP/Lunas</span>
+                                    </li>
                                 </ul>
                             </div>
 
                             <a href="{{ route('customer.booking.create', $studio->id) }}"
-                                class="block w-full text-center bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 rounded-lg font-bold hover:from-teal-700 hover:to-cyan-700 transition shadow-lg">
-                                🎵 Booking Sekarang
+                                class="block w-full text-center bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors text-sm shadow-sm">
+                                Booking Sekarang
                             </a>
 
-                            <div class="text-center">
-                                <p class="text-xs text-gray-500">Dengan booking, Anda menyetujui</p>
-                                <a href="#" class="text-xs text-teal-600 hover:underline">Syarat & Ketentuan</a>
+                            <p class="text-xs text-center text-slate-500 mt-3">
+                                Dengan booking, Anda menyetujui <a href="#"
+                                    class="text-amber-600 hover:underline">S&K</a>
+                            </p>
+                        @else
+                            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+                                <svg class="w-12 h-12 text-red-400 mx-auto mb-2" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                                    </path>
+                                </svg>
+                                <p class="text-sm font-bold text-red-800">Tidak Tersedia</p>
+                                <p class="text-xs text-red-600 mt-1">Studio sedang tutup</p>
                             </div>
-                        </div>
-                    @else
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                            <svg class="w-12 h-12 text-red-400 mx-auto mb-2" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
-                                </path>
-                            </svg>
-                            <p class="text-red-700 font-medium">Studio Tidak Tersedia</p>
-                            <p class="text-red-600 text-sm mt-1">Studio ini sedang tidak aktif</p>
-                        </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
 @endsection
