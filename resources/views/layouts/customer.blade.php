@@ -4,168 +4,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Customer') - Studio Musik</title>
+    <title>@yield('title', 'Customer') - Studio Musik Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            /* slate-100 */
+        }
+
+        .text-gold-600 {
+            color: #CA8A04;
+        }
+
+        .bg-gold-500 {
+            background-color: #FBBF24;
+        }
+
+        .hover\:bg-gold-600:hover {
+            background-color: #D97706;
+        }
+
+        /* Style untuk link navbar yang aktif */
+        .navbar-link-active {
+            color: #CA8A04;
+            /* gold-600 */
+            font-weight: 600;
+            position: relative;
+        }
+
+        .navbar-link-active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #FBBF24;
+            /* gold-500 */
+            border-radius: 2px;
+        }
+    </style>
 </head>
 
-<body class="bg-slate-50">
+<body class="antialiased">
 
-    <!-- Fixed Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-gradient-to-r from-slate-900 to-teal-900 shadow-lg">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-slate-200/70">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-teal-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
-                            </path>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-white hidden sm:block">Studio Musik</span>
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <a href="{{ route('customer.home') }}">
+                        <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-28 h-28 object-contain -my-4">
+                    </a>
                 </div>
 
-                <!-- Menu Navigation -->
-                <div class="hidden md:flex items-center space-x-1">
+                <div class="hidden md:flex items-center space-x-8">
                     <a href="{{ route('customer.home') }}"
-                        class="px-4 py-2 text-white hover:bg-white/10 rounded-lg transition {{ request()->routeIs('customer.home') ? 'bg-white/10' : '' }}">
-                        Beranda
-                    </a>
+                        class="relative text-sm font-medium transition-colors text-slate-700 hover:text-gold-600 {{ request()->routeIs('customer.home') ? 'navbar-link-active' : '' }}">Beranda</a>
                     <a href="{{ route('customer.studio.index') }}"
-                        class="px-4 py-2 text-white hover:bg-white/10 rounded-lg transition {{ request()->routeIs('customer.studio.*') ? 'bg-white/10' : '' }}">
-                        Studio
-                    </a>
+                        class="relative text-sm font-medium transition-colors text-slate-700 hover:text-gold-600 {{ request()->routeIs('customer.studio.*') ? 'navbar-link-active' : '' }}">Studio</a>
                     <a href="{{ route('customer.booking.index') }}"
-                        class="px-4 py-2 text-white hover:bg-white/10 rounded-lg transition {{ request()->routeIs('customer.booking.index') ? 'bg-white/10' : '' }}">
-                        Booking Saya
-                    </a>
+                        class="relative text-sm font-medium transition-colors text-slate-700 hover:text-gold-600 {{ request()->routeIs('customer.booking.index') ? 'navbar-link-active' : '' }}">Booking
+                        Saya</a>
                     <a href="{{ route('customer.booking.history') }}"
-                        class="px-4 py-2 text-white hover:bg-white/10 rounded-lg transition {{ request()->routeIs('customer.booking.history') ? 'bg-white/10' : '' }}">
-                        Riwayat
-                    </a>
+                        class="relative text-sm font-medium transition-colors text-slate-700 hover:text-gold-600 {{ request()->routeIs('customer.booking.history') ? 'navbar-link-active' : '' }}">Riwayat</a>
                 </div>
 
-                <!-- User Menu -->
-                <div class="flex items-center space-x-3">
-                    <div class="relative group">
-                        <button
-                            class="flex items-center space-x-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                            </svg>
-                            <span class="text-white text-sm hidden sm:block">{{ auth()->user()->name }}</span>
-                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown -->
-                        <div
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                            <div class="py-2">
-                                <div class="px-4 py-2 border-b">
-                                    <p class="text-sm font-medium text-gray-900">{{ auth()->user()->name }}</p>
-                                    <p class="text-xs text-gray-500">{{ auth()->user()->email }}</p>
-                                </div>
-                                <form action="{{ route('logout') }}" method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition">
-                                        Logout
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mobile Menu Button -->
-                    <button id="mobile-menu-btn" class="md:hidden p-2 text-white">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"></path>
+                <div x-data="{ dropdownOpen: false }" class="relative">
+                    <button @click="dropdownOpen = !dropdownOpen"
+                        class="flex items-center space-x-2 focus:outline-none">
+                        <span class="font-semibold text-sm text-slate-700">{{ auth()->user()->name }}</span>
+                        <svg class="h-5 w-5 text-slate-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
                         </svg>
                     </button>
+                    <div x-show="dropdownOpen" @click.away="dropdownOpen = false" x-transition
+                        class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50"
+                        style="display: none;">
+                        <div class="px-4 py-3 border-b border-slate-100">
+                            <p class="text-sm font-semibold text-slate-900">{{ auth()->user()->name }}</p>
+                            <p class="text-xs text-slate-500 truncate">{{ auth()->user()->email }}</p>
+                        </div>
+                        <div class="py-1">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-left flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">...</svg>
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700">
-            <div class="px-4 py-3 space-y-2">
-                <a href="{{ route('customer.home') }}"
-                    class="block px-4 py-2 text-white hover:bg-white/10 rounded-lg {{ request()->routeIs('customer.home') ? 'bg-white/10' : '' }}">
-                    Beranda
-                </a>
-                <a href="{{ route('customer.studio.index') }}"
-                    class="block px-4 py-2 text-white hover:bg-white/10 rounded-lg {{ request()->routeIs('customer.studio.*') ? 'bg-white/10' : '' }}">
-                    Studio
-                </a>
-                <a href="{{ route('customer.booking.index') }}"
-                    class="block px-4 py-2 text-white hover:bg-white/10 rounded-lg {{ request()->routeIs('customer.booking.index') ? 'bg-white/10' : '' }}">
-                    Booking Saya
-                </a>
-                <a href="{{ route('customer.booking.history') }}"
-                    class="block px-4 py-2 text-white hover:bg-white/10 rounded-lg {{ request()->routeIs('customer.booking.history') ? 'bg-white/10' : '' }}">
-                    Riwayat
-                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="pt-16 min-h-screen">
-        <!-- Alert Messages -->
-        @if (session('success'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-                <div class="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                    {{ session('success') }}
-                </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                    {{ session('error') }}
-                </div>
-            </div>
-        @endif
-
+    <main>
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 border-t border-slate-800 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <p class="text-center text-gray-400 text-sm">
-                © 2025 Studio Musik Booking System. All rights reserved.
+    <footer class="bg-white border-t border-slate-200 mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-slate-500 text-sm">
+                © {{ date('Y') }} Studio Musik Booking System. All rights reserved.
             </p>
         </div>
     </footer>
-
-    <script>
-        // Mobile Menu Toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-
-        // Auto hide alerts after 5 seconds
-        setTimeout(function() {
-            const alerts = document.querySelectorAll('[class*="border-green"], [class*="border-red"]');
-            alerts.forEach(function(alert) {
-                alert.style.transition = 'opacity 0.5s';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.remove();
-                }, 500);
-            });
-        }, 5000);
-    </script>
 
     @stack('scripts')
 </body>

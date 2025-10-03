@@ -4,212 +4,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome - Studio Musik Booking</title>
+    <title>Booking Studio Musik - Modern & Mudah</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            background-image: url('{{ asset('images/bg1.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            filter: blur(4px) brightness(0.9);
+        }
+
+        .glass-panel-light {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        /* Definisi Warna Emas */
+        .text-gold-500 {
+            color: #F59E0B;
+        }
+
+        .bg-gold-400 {
+            background-color: #FBBF24;
+        }
+
+        .hover\:bg-gold-500:hover {
+            background-color: #F59E0B;
+        }
+
+        .hover\:text-gold-500:hover {
+            color: #F59E0B;
+        }
+    </style>
 </head>
 
-<body class="bg-slate-900">
+<body x-data="{ lastScrollY: window.scrollY, navbarVisible: true }"
+    @scroll.window="
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY && currentScrollY > 100) { navbarVisible = false; } 
+        else { navbarVisible = true; }
+        lastScrollY = currentScrollY;
+    "
+    class="text-slate-800">
 
-    <!-- Navbar -->
-    <nav class="fixed w-full z-50 bg-slate-900/90 backdrop-blur-lg border-b border-purple-800/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3">
-                    <div
-                        class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
-                            </path>
-                        </svg>
-                    </div>
-                    <span class="text-xl font-bold text-white">Studio Musik</span>
+    <div class="fixed-bg"></div>
+
+    <nav :class="navbarVisible ? 'translate-y-0' : '-translate-y-full'"
+        class="fixed w-full z-50 top-0 left-0 right-0 transition-transform duration-300 ease-in-out">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center glass-panel-light rounded-xl p-2 px-4 shadow-sm">
+                <div class="flex items-center">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-24 h-24 object-contain -my-4">
                 </div>
-
-                <!-- Auth Buttons -->
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2">
                     <a href="{{ route('login') }}"
-                        class="px-5 py-2 text-white hover:text-purple-300 transition font-medium">
-                        Masuk
-                    </a>
+                        class="px-5 py-2.5 text-slate-700 hover:text-gold-500 transition-colors font-semibold text-sm">Masuk</a>
                     <a href="{{ route('register') }}"
-                        class="px-5 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition font-medium shadow-lg">
-                        Daftar
-                    </a>
+                        class="px-5 py-2.5 bg-gold-400 text-gray-900 rounded-lg hover:bg-gold-500 transition-all font-semibold text-sm shadow-sm">Daftar</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 px-4 overflow-hidden">
-        <!-- Background Effects -->
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-slate-900 to-indigo-900/20"></div>
-        <div class="absolute top-20 left-10 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl"></div>
-
-        <div class="relative max-w-7xl mx-auto">
-            <div class="text-center">
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
-                    Booking Studio Musik
-                    <span class="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">
-                        Jadi Lebih Mudah
-                    </span>
+    <div class="relative z-10">
+        <section class="h-screen w-full flex items-center justify-center p-4">
+            <div class="text-center glass-panel-light rounded-3xl p-8 md:p-16 shadow-lg max-w-6xl mx-auto">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-4">
+                    Ekspresikan Musikmu.<br>Kami <span class="text-gold-500">Urus</span> Sisanya.
                 </h1>
-                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-                    Sistem booking online dengan algoritma FCFS. Pesan studio musik favoritmu dengan mudah, cepat, dan
-                    aman.
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto mb-8">
+                    Platform booking studio paling modern. Temukan jadwal kosong, bayar, dan mainkan. Semudah itu.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="{{ route('register') }}"
-                        class="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition font-medium shadow-xl text-lg">
-                        Mulai Booking Sekarang
-                    </a>
-                    <a href="#fitur"
-                        class="px-8 py-3 bg-white/10 backdrop-blur text-white rounded-lg hover:bg-white/20 transition font-medium border border-white/20">
-                        Lihat Fitur
-                    </a>
-                </div>
-            </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-                <div class="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20">
-                    <div class="text-4xl font-bold text-purple-400 mb-2">24/7</div>
-                    <div class="text-gray-300">Booking Kapan Saja</div>
-                </div>
-                <div class="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-indigo-500/20">
-                    <div class="text-4xl font-bold text-indigo-400 mb-2">FCFS</div>
-                    <div class="text-gray-300">Sistem Antrian Fair</div>
-                </div>
-                <div class="bg-white/5 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20">
-                    <div class="text-4xl font-bold text-purple-400 mb-2">QRIS</div>
-                    <div class="text-gray-300">Pembayaran Mudah</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="fitur" class="py-20 px-4 bg-slate-800/50">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-white mb-4">Fitur Unggulan</h2>
-                <p class="text-gray-400">Kemudahan yang kami tawarkan untuk pengalaman booking terbaik</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div
-                    class="bg-gradient-to-br from-purple-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition">
-                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Booking Real-Time</h3>
-                    <p class="text-gray-400">Cek ketersediaan studio secara real-time dan booking langsung</p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div
-                    class="bg-gradient-to-br from-indigo-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-indigo-500/20 hover:border-indigo-500/40 transition">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Pembayaran QRIS</h3>
-                    <p class="text-gray-400">Bayar dengan mudah menggunakan QRIS, aman dan cepat</p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div
-                    class="bg-gradient-to-br from-purple-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition">
-                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Sistem FCFS</h3>
-                    <p class="text-gray-400">First Come First Served - siapa cepat dia dapat</p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div
-                    class="bg-gradient-to-br from-indigo-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-indigo-500/20 hover:border-indigo-500/40 transition">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Riwayat Booking</h3>
-                    <p class="text-gray-400">Lihat semua riwayat booking dan status pembayaran</p>
-                </div>
-
-                <!-- Feature 5 -->
-                <div
-                    class="bg-gradient-to-br from-purple-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition">
-                    <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Notifikasi Status</h3>
-                    <p class="text-gray-400">Dapatkan update status booking secara real-time</p>
-                </div>
-
-                <!-- Feature 6 -->
-                <div
-                    class="bg-gradient-to-br from-indigo-900/40 to-slate-900/40 backdrop-blur-lg rounded-xl p-6 border border-indigo-500/20 hover:border-indigo-500/40 transition">
-                    <div class="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                            </path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Laporan Digital</h3>
-                    <p class="text-gray-400">Admin dapat export laporan ke Excel dan PDF</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-20 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <div
-                class="bg-gradient-to-r from-purple-900/50 to-indigo-900/50 backdrop-blur-lg rounded-2xl p-12 border border-purple-500/20">
-                <h2 class="text-4xl font-bold text-white mb-4">Siap Mulai Booking?</h2>
-                <p class="text-gray-300 mb-8 text-lg">
-                    Daftar sekarang dan rasakan kemudahan booking studio musik dengan sistem FCFS
-                </p>
-                <a href="{{ route('register') }}"
-                    class="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg hover:from-purple-700 hover:to-indigo-700 transition font-medium shadow-xl text-lg">
-                    Daftar Gratis Sekarang
+                <a href="{{ route('customer.studio.index') }}"
+                    class="inline-block px-10 py-4 bg-gold-400 text-gray-900 rounded-lg hover:bg-gold-500 transition-all font-bold shadow-md transform hover:scale-105">
+                    Mulai Booking
                 </a>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="border-t border-purple-800/30 py-8 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray-400">© 2025 Studio Musik Booking System. All rights reserved.</p>
-            <p class="text-gray-500 text-sm mt-2">Powered by FCFS Algorithm</p>
+        <div class="bg-white">
+            <section class="py-20 px-4">
+                <div class="max-w-7xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl font-bold text-slate-900 mb-4">Galeri Studio Kami</h2>
+                        <p class="text-lg text-slate-500 max-w-2xl mx-auto">Intip fasilitas yang siap mendukung
+                            kreativitasmu.</p>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="group aspect-w-1 aspect-h-1"><img
+                                class="object-cover w-full h-full rounded-xl group-hover:scale-105 transition-transform duration-300"
+                                src="{{ asset('images/bg1.jpg') }}" alt="Studio Image 1"></div>
+                        <div class="group aspect-w-1 aspect-h-1"><img
+                                class="object-cover w-full h-full rounded-xl group-hover:scale-105 transition-transform duration-300"
+                                src="{{ asset('images/bg2.jpg') }}" alt="Studio Image 2"></div>
+                        <div class="group aspect-w-1 aspect-h-1"><img
+                                class="object-cover w-full h-full rounded-xl group-hover:scale-105 transition-transform duration-300"
+                                src="{{ asset('images/bg3.jpg') }}" alt="Studio Image 3"></div>
+                        <div class="group aspect-w-1 aspect-h-1"><img
+                                class="object-cover w-full h-full rounded-xl group-hover:scale-105 transition-transform duration-300"
+                                src="{{ asset('images/bg1.jpg') }}" alt="Studio Image 4"></div>
+                    </div>
+                </div>
+            </section>
         </div>
-    </footer>
 
+        <section class="py-20 px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white mb-4 drop-shadow-lg">Kunjungi Kami</h2>
+                    <p class="text-lg text-slate-200 drop-shadow-lg">Kami siap menyambut kedatanganmu.</p>
+                </div>
+                <div
+                    class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center glass-panel-light p-8 rounded-2xl shadow-lg">
+                    <div>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-4">Alamat Studio</h3>
+                        <p class="text-slate-700 mb-2">Jl. Contoh No. 123, Kota Bandung, Jawa Barat 40111</p>
+                        <p class="text-slate-600 mb-6">Lokasi strategis di pusat kota, mudah dijangkau dari mana saja.
+                        </p>
+                        <h4 class="text-lg font-semibold text-slate-900 mb-2">Jam Operasional:</h4>
+                        <p class="text-slate-700">Senin - Minggu: 10:00 - 23:00 WIB</p>
+                        <h4 class="text-lg font-semibold text-slate-900 mt-4 mb-2">Kontak:</h4>
+                        <p class="text-slate-700">Telepon: (022) 123-4567</p>
+                        <p class="text-slate-700">Email: booking@studiokami.com</p>
+                    </div>
+                    <div class="aspect-w-16 aspect-h-9 rounded-xl overflow-hidden border border-slate-200 shadow-lg">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.902348545229!2d107.61821037596045!3d-6.902206093096843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e64c5e8866e5%3A0x34be56247c1f83c!2sGedung%20Sate!5e0!3m2!1sid!2sid!4v1696435368383!5m2!1sid!2sid"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-white pt-16 pb-6 px-2">
+            <div class="max-w-3xl mx-auto text-center">
+                <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Logo"
+                        class="w-34 h-32 object-contain mx-auto mt-4"></a>
+                <p class="max-w-md mx-auto mt-2 text-slate-600">Platform booking studio musik modern yang dirancang
+                    untuk memudahkan hidup para musisi.</p>
+                <div class="flex justify-center space-x-6 mt-8">
+                    <a href="#" class="text-slate-500 hover:text-gold-500 transition-colors">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.024.06 1.378.06 3.808s-.012 2.784-.06 3.808c-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.024.048-1.378.06-3.808.06s-2.784-.013-3.808-.06c-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.048-1.024-.06-1.378-.06-3.808s.012-2.784.06-3.808c.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 016.345 2.525c.636-.247 1.363-.416 2.427-.465C9.795 2.013 10.148 2 12.315 2zm0 1.62c-2.403 0-2.741.01-3.72.058-1.267.058-2.148.273-2.912.576a3.27 3.27 0 00-1.846 1.847c-.303.764-.518 1.644-.576 2.912C2.01 9.259 2 9.597 2 12.315s.01 3.056.058 4.035c.058 1.267.273 2.148.576 2.912a3.27 3.27 0 001.847 1.846c.764.303 1.644.518 2.912.576 1.02.048 1.317.058 3.72.058s2.699-.01 3.72-.058c1.267-.058 2.148-.273 2.912-.576a3.27 3.27 0 001.846-1.847c.303-.764.518-1.644.576-2.912.048-1.02.058-1.317.058-3.72s-.01-2.699-.058-3.72c-.058-1.267-.273-2.148-.576-2.912a3.27 3.27 0 00-1.846-1.847c-.764-.303-1.644-.518-2.912-.576C15.014 3.63 14.716 3.62 12.315 3.62zM12 8.118a4.197 4.197 0 100 8.394 4.197 4.197 0 000-8.394zm0 6.774a2.577 2.577 0 110-5.154 2.577 2.577 0 010 5.154zM16.803 8.11a.96.96 0 100-1.92.96.96 0 000 1.92z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-slate-500 hover:text-gold-500 transition-colors">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M19.702 4.298a4.805 4.805 0 00-1.66-1.12c-.93-.418-2.09-.7-3.41-.85C13.298 2.21 13.048 2 12 2s-.298.21-.632.328c-1.32.15-2.48.432-3.41.85a4.805 4.805 0 00-1.66 1.12c-.598.598-.996 1.378-1.12 2.203-.15 1.32-.21 2.82-.21 3.499s.06 2.178.21 3.499c.124.825.522 1.605 1.12 2.203.598.598 1.378.996 2.203 1.12 1.32.15 2.82.21 3.499.21s2.178-.06 3.499-.21c.825-.124 1.605-.522 2.203-1.12.598-.598.996-1.378 1.12-2.203.15-1.32.21-2.82.21-3.499s-.06-2.178-.21-3.499a4.805 4.805 0 00-1.12-2.203zM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.12-6.082c-.282 0-.51.228-.51.51v.153c0 .282.228.51.51.51h2.24c.282 0 .51-.228.51-.51v-.153c0-.282-.228-.51-.51-.51h-2.24zm4.18-3.033a.51.51 0 01-.362-.872c.443-.443.725-1.03.725-1.674 0-.644-.282-1.231-.725-1.674a2.352 2.352 0 00-1.674-.725c-.644 0-1.231.282-1.674.725a2.352 2.352 0 00-.725 1.674c0 .644.282 1.231.725 1.674a.51.51 0 01-.724.724 3.372 3.372 0 01-1.03-2.398c0-.93.383-1.79 1.03-2.398a3.372 3.372 0 012.398-1.03c.93 0 1.79.383 2.398 1.03.647.608 1.03 1.468 1.03 2.398 0 .93-.383 1.79-1.03 2.398a.51.51 0 01-.362.148zm-6.142 0a.51.51 0 01-.362-.872c.443-.443.725-1.03.725-1.674 0-.644-.282-1.231-.725-1.674a2.352 2.352 0 00-1.674-.725c-.644 0-1.231.282-1.674.725a2.352 2.352 0 00-.725 1.674c0 .644.282 1.231.725 1.674a.51.51 0 11-.724.724 3.372 3.372 0 01-1.03-2.398c0-.93.383-1.79 1.03-2.398.608-.647 1.468-1.03 2.398-1.03.93 0 1.79.383 2.398 1.03.647.608 1.03 1.468 1.03 2.398 0 .93-.383 1.79-1.03 2.398a.51.51 0 01-.362.148z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-slate-500 hover:text-gold-500 transition-colors">
+                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M11.944 12.062c-1.06 0-1.92.86-1.92 1.92s.86 1.92 1.92 1.92 1.92-.86 1.92-1.92-.86-1.92-1.92-1.92zm2.152 4.085c-.322 1.139-1.42 2.016-2.662 1.996-1.291-.02-2.378-.962-2.618-2.196-.233-1.196.536-2.436 1.732-2.669.04-.008.08-.016.12-.024.08-.016.15-.041.23-.058.07-.017.14-.042.21-.059.08-.018.15-.044.23-.061.08-.017.16-.034.24-.051.1-.02.19-.05.29-.071.09-.02.19-.04.28-.051l.1-.01.12-.01c.21-.02.42-.02.63 0l.12.01.1.01c.09.01.19.03.28.05.1.02.19.05.29.07.08.02.16.03.24.05.08.02.15.04.23.06.07.02.14.04.21.06.08.02.15.04.23.06.04.01.08.02.12.02 1.196.233 1.965 1.472 1.732 2.669zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="text-slate-500 hover:text-gold-500 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-slate-200 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500">
+                    <div class="flex space-x-6 order-2 md:order-1 mt-4 md:mt-0">
+                        <a href="#" class="hover:text-gold-500 transition-colors">Syarat & Ketentuan</a>
+                        <a href="#" class="hover:text-gold-500 transition-colors">Kebijakan Privasi</a>
+                    </div>
+                    <p class="order-1 md:order-2">© {{ date('Y') }} Studio Musik Booking System. All rights
+                        reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
 </body>
 
 </html>

@@ -31,7 +31,7 @@ class LaporanController extends Controller
             $query->where('status_booking', $request->status);
         }
 
-        $bookings = $query->orderBy('tanggal_booking', 'desc')->get();
+        $bookings = $query->orderBy('tanggal_booking', 'desc')->paginate(10);
 
         // Hitung total pendapatan (hanya yang terverifikasi)
         $totalPendapatan = 0;

@@ -3,182 +3,113 @@
 @section('title', 'Beranda')
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
-        <!-- Hero Section -->
-        <div class="bg-gradient-to-r from-teal-600 to-cyan-600 rounded-2xl p-8 md:p-12 text-white mb-8">
-            <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="mb-6 md:mb-0">
-                    <h1 class="text-3xl md:text-4xl font-bold mb-3">Selamat Datang, {{ auth()->user()->name }}! 🎵</h1>
-                    <p class="text-teal-100 mb-4">Booking studio musik favoritmu dengan mudah dan cepat</p>
-                    <a href="{{ route('customer.studio.index') }}"
-                        class="inline-block px-6 py-3 bg-white text-teal-600 rounded-lg font-medium hover:bg-teal-50 transition shadow-lg">
-                        Lihat Studio Tersedia
-                    </a>
-                </div>
-                <div class="bg-white/10 backdrop-blur-lg rounded-xl p-6">
-                    <div class="text-center">
-                        <p class="text-5xl font-bold">{{ $bookingAktif }}</p>
-                        <p class="text-teal-200 text-sm mt-2">Booking Aktif</p>
-                    </div>
-                </div>
+        <div class="relative bg-white rounded-xl shadow-sm border border-slate-200 p-8 mb-8 overflow-hidden">
+            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-yellow-50 rounded-full"></div>
+            <div class="absolute bottom-0 left-0 -mb-12 -ml-12 w-48 h-48 bg-slate-50 rounded-full"></div>
+
+            <div class="relative z-10">
+                <h1 class="text-3xl font-bold text-slate-800 mb-2">Selamat Datang Kembali, {{ auth()->user()->name }}!</h1>
+                <p class="text-slate-500">Siap untuk membuat musik? Lihat studio yang tersedia atau kelola booking-mu di
+                    sini.</p>
+                <a href="{{ route('customer.studio.index') }}"
+                    class="inline-block mt-6 px-6 py-3 bg-gold-500 text-white rounded-lg hover:bg-gold-600 transition-all font-bold shadow-lg transform hover:scale-105 text-sm">
+                    Booking Studio Baru
+                </a>
             </div>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                <div class="flex items-center justify-between">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Sistem Booking</p>
-                        <p class="text-2xl font-bold text-gray-800 mt-1">FCFS</p>
+                        <p class="text-sm font-medium text-slate-500">Booking Aktif</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2">{{ $bookingAktif }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
                         </svg>
                     </div>
                 </div>
+                <a href="{{ route('customer.booking.index') }}"
+                    class="text-sm font-semibold text-gold-600 hover:underline mt-4 inline-block">Lihat Detail →</a>
             </div>
-
-            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                <div class="flex items-center justify-between">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Total Studio</p>
-                        <p class="text-2xl font-bold text-gray-800 mt-1">{{ $studios->count() }}+</p>
+                        <p class="text-sm font-medium text-slate-500">Total Studio</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2">{{ $studios->count() }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
                             </path>
                         </svg>
                     </div>
                 </div>
+                <p class="text-sm text-slate-400 mt-4">Pilihan studio berkualitas.</p>
             </div>
-
-            <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-                <div class="flex items-center justify-between">
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+                <div class="flex items-start justify-between">
                     <div>
-                        <p class="text-gray-500 text-sm">Pembayaran</p>
-                        <p class="text-2xl font-bold text-gray-800 mt-1">QRIS</p>
+                        <p class="text-sm font-medium text-slate-500">Riwayat Booking</p>
+                        <p class="text-4xl font-bold text-slate-800 mt-2">
+                            {{ auth()->user()->bookings()->where('status_booking', 'selesai')->count() }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
                         <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                 </div>
+                <a href="{{ route('customer.booking.history') }}"
+                    class="text-sm font-semibold text-gold-600 hover:underline mt-4 inline-block">Lihat Riwayat →</a>
             </div>
         </div>
 
-        <!-- Studio Section -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between mb-6">
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-800">Studio Populer</h2>
-                    <p class="text-gray-500 text-sm">Pilih studio musik terbaik untuk kebutuhanmu</p>
-                </div>
+        <div>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-slate-800">Rekomendasi Studio Untukmu</h2>
                 <a href="{{ route('customer.studio.index') }}"
-                    class="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center space-x-1">
-                    <span>Lihat Semua</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </a>
+                    class="text-sm font-semibold text-gold-600 hover:underline">Lihat Semua</a>
             </div>
-
             @if ($studios->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach ($studios as $studio)
+                    @foreach ($studios->take(3) as $studio)
                         <div
-                            class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition border border-gray-100">
-                            <div
-                                class="h-48 bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center">
-                                @if ($studio->gambar)
-                                    <img src="{{ asset('uploads/studios/' . $studio->gambar) }}"
-                                        alt="{{ $studio->nama_studio }}" class="w-full h-full object-cover">
-                                @else
-                                    <svg class="w-20 h-20 text-white opacity-50" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
-                                        </path>
-                                    </svg>
-                                @endif
+                            class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 group transform hover:-translate-y-1 transition-transform duration-300">
+                            <div class="h-48 bg-slate-200 relative overflow-hidden">
+                                <img src="{{ asset('uploads/studios/' . $studio->gambar) }}"
+                                    alt="{{ $studio->nama_studio }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             </div>
                             <div class="p-5">
-                                <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $studio->nama_studio }}</h3>
-                                <div class="flex items-center text-gray-500 text-sm mb-3">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
-                                        </path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    {{ $studio->lokasi }}
-                                </div>
-                                <div class="flex items-center justify-between">
+                                <h3 class="font-bold text-lg text-slate-800 mb-1 truncate">{{ $studio->nama_studio }}</h3>
+                                <p class="text-sm text-slate-500 mb-4 line-clamp-1">{{ $studio->lokasi }}</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-slate-100">
                                     <div>
-                                        <p class="text-2xl font-bold text-purple-600">Rp
-                                            {{ number_format($studio->harga_per_jam, 0, ',', '.') }}</p>
-                                        <p class="text-xs text-gray-500">per jam</p>
+                                        <p class="text-lg font-bold text-gold-600">Rp
+                                            {{ number_format($studio->harga_per_jam, 0, ',', '.') }}<span
+                                                class="text-sm font-normal text-slate-500">/jam</span></p>
                                     </div>
                                     <a href="{{ route('customer.studio.show', $studio->id) }}"
-                                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition text-sm font-medium">
-                                        Booking
-                                    </a>
+                                        class="px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition text-sm font-semibold">Detail</a>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
             @else
-                <div class="bg-white rounded-xl p-12 text-center shadow-md">
-                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                        </path>
-                    </svg>
-                    <p class="text-gray-500">Belum ada studio tersedia</p>
+                <div class="bg-white rounded-xl p-12 text-center border border-slate-200">
+                    <p class="text-slate-500">Belum ada studio yang tersedia.</p>
                 </div>
             @endif
         </div>
-
-        <!-- Info Section -->
-        <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-8 border border-indigo-100">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">Cara Booking Studio</h3>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold">1</span>
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Pilih Studio</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold">2</span>
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Pilih Tanggal & Jam</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold">3</span>
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Bayar via QRIS</p>
-                </div>
-                <div class="text-center">
-                    <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <span class="text-white font-bold">4</span>
-                    </div>
-                    <p class="text-sm font-medium text-gray-700">Datang ke Studio</p>
-                </div>
-            </div>
-        </div>
-
     </div>
 @endsection
