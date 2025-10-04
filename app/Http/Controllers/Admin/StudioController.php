@@ -19,6 +19,26 @@ class StudioController extends Controller
         return view('admin.studio.create');
     }
 
+    public function show(Studio $studio)
+    {
+        // Load relasi bookings dengan user
+        $studio->load(['bookings.user']);
+
+        // Hitung statistik
+        $totalBooking = $studio->bookings()->count();
+        $bookingSelesai = $studio->bookings()->where('status_booking', 'selesai')->count();
+        $totalPendapatan = $studio->bookings()
+            ->where('status_booking', 'selesai')
+            ->sum('total_harga');
+
+        return view('admin.studio.show', compact(
+            'studio',
+            'totalBooking',
+            'bookingSelesai',
+            'totalPendapatan'
+        ));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
