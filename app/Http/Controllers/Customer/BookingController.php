@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Studio;
 use App\Models\Booking;
 use App\Models\Payment;
+use App\Models\User;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -155,7 +157,7 @@ class BookingController extends Controller
                 ->with('success', 'Booking berhasil! Menunggu verifikasi pembayaran dari admin.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Terjadi kesalahan. Silakan coba lagi.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -189,6 +191,15 @@ class BookingController extends Controller
         }
 
         $booking->update(['status_booking' => 'dibatalkan']);
+
+        // Notifikasi ke customer
+        Notification::createBookingCancelledNotification($booking->user_id, $booking);
+
+        // Notifikasi ke semua admin
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            Notification::createAdminBookingCancelledNotification($admin->id, $booking);
+        }
 
         return redirect()->route('customer.booking.index')->with('success', 'Booking berhasil dibatalkan.');
     }

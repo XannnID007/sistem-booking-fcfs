@@ -101,11 +101,11 @@
                 <div class="flex items-center gap-3">
                     <a href="{{ route('login') }}" :class="scrolled ? 'text-slate-700' : 'text-white'"
                         class="px-5 py-2 hover:text-amber-600 transition-colors font-semibold text-sm">
-                        Masuk
+                        Login
                     </a>
                     <a href="{{ route('register') }}"
                         class="px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-all font-bold text-sm shadow-lg hover:shadow-xl">
-                        Daftar Gratis
+                        Register
                     </a>
                 </div>
             </div>
