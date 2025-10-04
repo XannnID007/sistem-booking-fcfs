@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\StudioController as AdminStudioController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\NotificationController;
 
 // Welcome Page
 Route::get('/', function () {
@@ -33,6 +34,12 @@ Route::middleware('guest')->group(function () {
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    // Notification Routes (for both admin and customer)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
 // Customer Routes
@@ -76,4 +83,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/export-excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
     Route::get('/laporan/export-pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
+
+    // Admin Notifications (specific route)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 });

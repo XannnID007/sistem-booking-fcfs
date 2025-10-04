@@ -41,6 +41,22 @@ class User extends Authenticatable
         return $this->hasMany(Booking::class);
     }
 
+    /**
+     * Get user's notifications
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    /**
+     * Get unread notifications count
+     */
+    public function unreadNotificationsCount()
+    {
+        return $this->notifications()->whereNull('read_at')->count();
+    }
+
     public function isAdmin()
     {
         return $this->role === 'admin';

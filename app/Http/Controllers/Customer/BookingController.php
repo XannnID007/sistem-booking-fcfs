@@ -133,7 +133,7 @@ class BookingController extends Controller
             $file->move(public_path('uploads/payments'), $filename);
 
             // Buat record pembayaran
-            Payment::create([
+            $payment = Payment::create([
                 'booking_id' => $booking->id,
                 'jumlah_bayar' => $validated['jumlah_bayar'],
                 'tipe_pembayaran' => $validated['tipe_pembayaran'],
@@ -141,6 +141,13 @@ class BookingController extends Controller
                 'status_pembayaran' => 'pending',
                 'bukti_transfer' => $filename
             ]);
+
+            // Send notification to all admins
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Notification::createBookingNotification($admin->id, $booking);
+                Notification::createPaymentNotification($admin->id, $payment);
+            }
 
             DB::commit();
 

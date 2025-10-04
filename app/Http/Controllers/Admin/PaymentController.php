@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Booking;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,6 +49,9 @@ class PaymentController extends Controller
                 $booking->update(['status_booking' => 'dibayar']);
             }
 
+            // Send notification to customer
+            Notification::createPaymentVerifiedNotification($booking->user_id, $payment);
+
             DB::commit();
 
             return redirect()->back()->with('success', 'Pembayaran berhasil diverifikasi.');
@@ -62,14 +67,26 @@ class PaymentController extends Controller
             'catatan_admin' => 'required|string|max:500'
         ]);
 
-        $payment->update([
-            'status_pembayaran' => 'ditolak',
-            'tanggal_verifikasi' => now(),
-            'verifikasi_oleh' => auth()->id(),
-            'catatan_admin' => $request->catatan_admin
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->back()->with('success', 'Pembayaran ditolak.');
+            $payment->update([
+                'status_pembayaran' => 'ditolak',
+                'tanggal_verifikasi' => now(),
+                'verifikasi_oleh' => auth()->id(),
+                'catatan_admin' => $request->catatan_admin
+            ]);
+
+            // Send notification to customer
+            Notification::createPaymentRejectedNotification($payment->booking->user_id, $payment);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Pembayaran ditolak.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal menolak pembayaran.');
+        }
     }
 
     public function storePelunasan(Request $request)
@@ -105,6 +122,9 @@ class PaymentController extends Controller
             if ($totalDibayar >= $booking->total_harga) {
                 $booking->update(['status_booking' => 'dibayar']);
             }
+
+            // Send notification to customer
+            Notification::createPaymentVerifiedNotification($booking->user_id, $payment);
 
             DB::commit();
 
